@@ -1,24 +1,25 @@
 <template>
-  <MobileHeader v-if="viewPort <= 425"/>
+  <MobileHeader v-if="viewPort < 425"/>
+  <NoteWall></NoteWall>
 </template>
 
 <script>
 import MobileHeader from "~/components/MobileHeader.vue";
+import NoteWall from "~/components/NoteWall.vue";
 import {computed} from 'vue'
 import {useDisplay} from 'vuetify'
 
 export default {
   name: "Main",
   components: {
-    MobileHeader
+    MobileHeader,
+    NoteWall
   },
 //https://vuetifyjs.com/en/features/display-and-platform/#examples
   setup() {
     const {name} = useDisplay()
 
     const viewPort = computed(() => {
-      // name is reactive and
-      // must use .value
       switch (name.value) {
         case 'xs':
           return 320
