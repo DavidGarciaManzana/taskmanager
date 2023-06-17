@@ -37,21 +37,8 @@ export default {
       }
       return undefined
     })
-    const margin = computed(() => {
-      switch (name.value) {
-        case 'xs':
-          return 2
-        case 'sm':
-          return 5
-        case 'md':
-          return 7
-        case 'lg':
-          return 10
-      }
-      return undefined
-    })
 
-    return {height, margin}
+    return {height}
   },
 }
 
