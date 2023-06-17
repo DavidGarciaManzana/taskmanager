@@ -29,7 +29,7 @@ export default {
         case 'md':
           return 70
         case 'lg':
-          return 120
+          return 80
         case 'xl':
           return 130
         case 'xxl':

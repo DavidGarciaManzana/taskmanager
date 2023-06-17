@@ -1,11 +1,11 @@
 <template>
-  <MobileHeader v-if="smAndDown"/>
-  <NoteWall></NoteWall>
+  <MobileHeader v-if="lgAndDown"/>
+  <NoteBoardPanel></NoteBoardPanel>
 </template>
 
 <script>
 import MobileHeader from "~/components/MobileHeader.vue";
-import NoteWall from "~/components/NoteWall.vue";
+import NoteBoardPanel from "~/components/NoteBoardPanel.vue";
 
 import {useDisplay} from 'vuetify'
 
@@ -13,12 +13,12 @@ export default {
   name: "Main",
   components: {
     MobileHeader,
-    NoteWall
+    NoteBoardPanel
   },
 //https://vuetifyjs.com/en/features/display-and-platform/#examples
   setup() {
-    const {smAndDown} = useDisplay()
-    return {smAndDown}
+    const {xlAndDown,lgAndDown} = useDisplay()
+    return {xlAndDown,lgAndDown}
   }
 }
 

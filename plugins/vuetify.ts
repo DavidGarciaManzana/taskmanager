@@ -22,12 +22,12 @@ export default defineNuxtPlugin(nuxtApp => {
         display: {
             mobileBreakpoint: 'sm',
             thresholds: {
-                xs: 320,
+                xs: 320, //de 320 a 375
                 sm: 375,
                 md: 425,
-                lg: 768,
+                lg: 610,
                 xl: 1024,
-                xxl: 1440
+                xxl: 1440 //de 1440a mas
             },
         },
     })

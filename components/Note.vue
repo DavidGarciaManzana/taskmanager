@@ -1,8 +1,11 @@
 <template>
   <v-card
       width="280px"
-      :class="completed ? 'isCompleted' : 'isNotCompleted'"
-  >
+      :class="[
+          lgAndUp ? 'extendedWidth' : '',
+  completed ? 'isCompleted' : 'isNotCompleted',
+
+]">
     <v-card-text>
       <div class="tags">
         <span class="tag" v-for="tag in tags">{{ tag }}</span>
@@ -13,8 +16,8 @@
       </h1>
       <p :class="completed ? 'textCrossed' : null">{{ content }}</p>
       <div class="iconsContainer">
-        <v-icon @click="completed = true" v-show="!completed" size="25"  icon="fa:far fa-circle"></v-icon>
-        <v-icon @click="completed = false" v-show="completed" size="25"  icon="fa:fas fa-circle"></v-icon>
+        <v-icon @click="completed = true" v-show="!completed" size="25" icon="fa:far fa-circle"></v-icon>
+        <v-icon @click="completed = false" v-show="completed" size="25" icon="fa:fas fa-circle"></v-icon>
         <v-icon size="25" icon="fa:fas fa-calendar-alt"></v-icon>
         {{
           date.toLocaleDateString("es-MX", {
@@ -29,14 +32,15 @@
               @click="reveal = true"
           >
             <v-icon size="25" icon="fa:far fa-comments"></v-icon>
-            <v-icon  class="exclamation" color="red" v-if="comments.length>0" size="15" icon="fa:fas fa-flag"></v-icon>
+            <p class="exclamation">{{ comments.length }}</p>
+            <v-icon class="exclamation" color="red" v-if="comments.length>0" size="15" icon="fa:fas fa-flag"></v-icon>
           </v-btn>
           <v-btn
               variant="text"
 
               @click="reveal = true"
           >
-            <v-icon size="25"  icon="fa:fas fa-cog"></v-icon>
+            <v-icon size="25" icon="fa:fas fa-cog"></v-icon>
           </v-btn>
         </v-card-actions>
       </div>
@@ -53,7 +57,7 @@
           <p class="text-h4 text--primary">
             Comments
           </p>
-          <p v-for="(comment,index) in comments">{{ index +1}} {{ comment }}</p>
+          <p v-for="(comment,index) in comments">{{ index + 1 }} {{ comment }}</p>
         </v-card-text>
         <v-card-actions class="pt-0">
           <v-btn
@@ -73,6 +77,8 @@
 
 <script>
 import {ref} from 'vue'
+import {useDisplay} from "vuetify";
+
 export default {
   name: "Note",
   props: {
@@ -98,9 +104,10 @@ export default {
     }
   },
   setup() {
+    const {lgAndUp} = useDisplay()
 
-    const reveal= ref(false)
-    return {reveal}
+    const reveal = ref(false)
+    return {reveal, lgAndUp}
   }
 }
 </script>
@@ -122,14 +129,17 @@ export default {
   position: absolute;
   width: 100%;
 }
-.textCrossed{
+
+.textCrossed {
   text-decoration: line-through;
 }
-.tags{
+
+.tags {
   display: flex;
   margin: 10px 0;
 }
-.tag{
+
+.tag {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -146,19 +156,26 @@ export default {
   border-radius: 18px;
 
 }
-.iconsContainer{
+
+.iconsContainer {
   margin-top: 15px;
   display: flex;
   align-items: center;
 }
-.exclamation{
+
+.exclamation {
   position: relative;
   right: 7px;
   top: -13px;
 }
+
 .closeTask {
   position: absolute;
   top: 10px;
   right: 10px;
+}
+
+.extendedWidth {
+  min-width: 500px;
 }
 </style>
