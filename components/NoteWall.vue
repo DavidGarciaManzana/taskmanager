@@ -4,7 +4,7 @@
 
     <AddNote></AddNote>
     <template v-for="{id,title,is_completed} in lightNotes" :key="id">
-      <LightNote  :title="title" :completed="is_completed"></LightNote>
+      <LightNote :id="id"  :title="title" :completed="is_completed"></LightNote>
     </template>
 
 
@@ -34,8 +34,8 @@ export default {
   setup() {
     const {lgAndDown, lgAndUp} = useDisplay()
     const {lightNotes} = useGetLightNotes()
-    // // todo Comentar la linea de abajo
-    // const answer = 0
+    // // // todo Comentar la linea de abajo
+    // const lightNotes = [{id:1,title:'hola',is_completed:0},{id:2,title:'hola',is_completed:1}]
 
     return {lgAndDown, lgAndUp, lightNotes}
   }

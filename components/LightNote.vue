@@ -3,15 +3,15 @@
       width="280"
       :class="[
           lgAndUp ? 'extendedWidth' : '',
-          completed ? 'completed' : null,
+          isCompleted===1 ? 'completed' : null,
   'container'
 ]"
   >
     <v-card-text class="d-flex">
       <v-icon class="closeTask" size="25" icon="fa:far fa-window-close"></v-icon>
       <div class="taskContainer" >
-        <v-icon @click="completed = 1" v-if="completed === 0"   size="20" icon="fa:far fa-circle"></v-icon>
-        <v-icon @click="completed = 0" v-else  size="20" icon="fa:fas fa-circle"></v-icon>
+        <v-icon @click="handleUpdate" v-if="isCompleted === 0"   size="20" icon="fa:far fa-circle"></v-icon>
+        <v-icon @click="handleUpdate" v-else  size="20" icon="fa:fas fa-circle"></v-icon>
         <h1   class="ml-5 text-h5 text--primary">
           {{ title }}
         </h1>
@@ -35,10 +35,15 @@
 
 <script>
 import {useDisplay} from "vuetify";
+import usePutNotes from "~/composables/usePutNotes";
 
 export default {
   name: "LightNote",
   props: {
+    id:{
+      type:Number,
+      required:true
+    },
     title: {
       type: String,
       required: true
@@ -48,10 +53,29 @@ export default {
       required: true
     }
   },
-  setup() {
+  setup({id,title,completed}) {
     const {lgAndUp} = useDisplay()
+    const {updateNote} = usePutNotes(id,title,completed)
+    const isLoading = ref(false)
+    const isCompleted = ref(completed)
 
-    return {lgAndUp}
+    const handleUpdate =()=>{
+      isLoading.value = true
+      try {
+        updateNote()
+        console.log(isCompleted.value)
+        isCompleted.value ===0 ? isCompleted.value=1 : isCompleted.value=0
+        console.log(isCompleted.value)
+        isLoading.value = false
+      }
+      catch (error){
+        isLoading.value = false
+        console.log(error)
+        window.alert('Something went wrong')
+      }
+    }
+
+    return {lgAndUp,handleUpdate,isCompleted}
   }
 }
 </script>
