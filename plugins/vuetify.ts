@@ -4,7 +4,6 @@ import 'vuetify/dist/vuetify.min.css'
 import {fa} from 'vuetify/iconsets/fa'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
-
 export default defineNuxtPlugin(nuxtApp => {
     const vuetify = createVuetify({
         ssr: true,
@@ -29,6 +28,7 @@ export default defineNuxtPlugin(nuxtApp => {
                 xl: 960,
                 xxl: 1440 //de 1440a mas
             },
+
         },
     })
 

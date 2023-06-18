@@ -1,7 +1,6 @@
 <template>
   <div :class="lgAndDown ? 'mobileNoteWallContainer' : 'desktopNoteWallContainer'">
     <SearchBar :class="lgAndUp ? 'extendedWidth' : null"></SearchBar>
-
     <AddNote></AddNote>
     <template v-for="{id,title,is_completed} in lightNotes" :key="id">
       <LightNote  :id="id"  :title="title" :completed="is_completed" :removeItem="removeItem" ></LightNote>
@@ -9,9 +8,7 @@
 
 
 
-<!--    <Note :title="'Wash my car'" :completed="true" :content="'Leave it clean and maybe later pulish it'"-->
-<!--          :date="new Date()" :comments="['Go to marks place to wash it','Not pay more than 100'] "-->
-<!--          :tags="['Car','Chores']"></Note>-->
+
 <!--    <Note :title="'Visit my grandma'" :completed="false"-->
 <!--          :content="'Remember to take the chess with me to play with her'" :date="new Date()"-->
 <!--          :comments="['Talk about her grandsons','Do not talk about cars'] " :tags="['Family','Quality time']"></Note>-->
@@ -34,9 +31,9 @@ export default {
   setup() {
     const originalArray = ref([])
     const {lgAndDown, lgAndUp} = useDisplay()
-    const {lightNotes} = useGetLightNotes()
+    // const {lightNotes} = useGetLightNotes()
     // // // todo Comentar la linea de abajo
-    // const lightNotes = [{id:1,title:'hola',is_completed:0},{id:2,title:'hola',is_completed:1}]
+    const lightNotes = [{id:1,title:'hola',is_completed:0},{id:2,title:'hola',is_completed:1}]
     onMounted(() => {
       console.log('aqui');
 

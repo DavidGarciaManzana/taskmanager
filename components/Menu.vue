@@ -55,11 +55,9 @@
       <div class="tags">
         <div style="background-color: lightskyblue" class="tag">
           <p>Tag 1</p>
-          <span class="number">3</span>
         </div>
         <div style="background-color: lightpink" class="tag">
           <p>Tag 2</p>
-          <span class="number">3</span>
         </div>
         <div style="background-color: darkgrey" class="tag ">
           <v-icon size="15" icon="fa:fas fa-plus"></v-icon>
