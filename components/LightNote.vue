@@ -26,7 +26,7 @@
           color="teal-accent-4"
           @click="reveal = true"
       >
-        <v-icon size="25" icon="fa:fas fa-chevron-down"></v-icon>
+        <v-icon class="chevron" size="25" icon="fa:fas fa-chevron-down"></v-icon>
       </v-btn>
     </v-card-actions>
 
@@ -77,8 +77,13 @@ export default {
 
 }
 .completed {
-  text-decoration: line-through;
   background-color: darkgrey;
+}
+.completed .taskContainer{
+  text-decoration: line-through;
+}
+.completed .chevron {
+  color: white;
 }
 
 </style>
