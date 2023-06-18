@@ -8,15 +8,14 @@
 ]"
   >
     <v-card-text class="d-flex">
-      <v-icon class="closeTask" size="25" icon="fa:far fa-window-close"></v-icon>
-      <div class="taskContainer" >
-        <v-icon @click="handleUpdate" v-if="isCompleted === 0"   size="20" icon="fa:far fa-circle"></v-icon>
-        <v-icon @click="handleUpdate" v-else  size="20" icon="fa:fas fa-circle"></v-icon>
-        <h1   class="ml-5 text-h5 text--primary">
+      <v-icon @click="handleDelete" class="closeTask" size="25" icon="fa:far fa-window-close"></v-icon>
+      <div class="taskContainer">
+        <v-icon @click="handleUpdate" v-if="isCompleted === 0" size="20" icon="fa:far fa-circle"></v-icon>
+        <v-icon @click="handleUpdate" v-else size="20" icon="fa:fas fa-circle"></v-icon>
+        <h1 class="ml-5 text-h6 text--primary">
           {{ title }}
         </h1>
       </div>
-
 
 
     </v-card-text>
@@ -36,13 +35,14 @@
 <script>
 import {useDisplay} from "vuetify";
 import usePutNotes from "~/composables/usePutNotes";
+import useDeleteNotes from "~/composables/useDeleteNotes";
 
 export default {
   name: "LightNote",
   props: {
-    id:{
-      type:Number,
-      required:true
+    id: {
+      type: Number,
+      required: true
     },
     title: {
       type: String,
@@ -51,31 +51,51 @@ export default {
     completed: {
       type: Number,
       required: true
+    },
+    removeItem: {
+      type:Function,
+      required:true
     }
   },
-  setup({id,title,completed}) {
+  setup({id, title, completed,removeItem}) {
     const {lgAndUp} = useDisplay()
-    const {updateNote} = usePutNotes(id,title,completed)
+    const {updateNote} = usePutNotes(id, title, completed)
+    const {deleteNote} = useDeleteNotes(id)
     const isLoading = ref(false)
     const isCompleted = ref(completed)
 
-    const handleUpdate =()=>{
+
+    const handleUpdate = () => {
       isLoading.value = true
       try {
         updateNote()
         console.log(isCompleted.value)
-        isCompleted.value ===0 ? isCompleted.value=1 : isCompleted.value=0
+        isCompleted.value === 0 ? isCompleted.value = 1 : isCompleted.value = 0
         console.log(isCompleted.value)
         isLoading.value = false
-      }
-      catch (error){
+      } catch (error) {
         isLoading.value = false
         console.log(error)
         window.alert('Something went wrong')
       }
     }
 
-    return {lgAndUp,handleUpdate,isCompleted}
+    const handleDelete = () => {
+      isLoading.value = true
+      try {
+        deleteNote()
+        console.log(id)
+        removeItem(id);
+        // removeFromArray(originalArray,id)
+        isLoading.value = false
+      } catch (error) {
+        isLoading.value = false
+        console.log(error)
+        window.alert('Something went wrong')
+      }
+    }
+
+    return {lgAndUp, handleUpdate, handleDelete, isCompleted}
   }
 }
 </script>
@@ -84,28 +104,33 @@ export default {
 .extendedWidth {
   min-width: 500px;
 }
+
 .container {
   margin-top: 28px;
   display: flex;
   flex-direction: column;
-  /*align-items: center;*/
 }
+
 .closeTask {
   position: absolute;
   top: 10px;
   right: 10px;
 }
-.taskContainer{
+
+.taskContainer {
   display: flex;
   align-items: baseline;
 
 }
+
 .completed {
   background-color: darkgrey;
 }
-.completed .taskContainer{
+
+.completed .taskContainer {
   text-decoration: line-through;
 }
+
 .completed .chevron {
   color: white;
 }
