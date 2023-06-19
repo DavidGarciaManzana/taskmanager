@@ -23,7 +23,7 @@
       <v-btn
           variant="text"
           color="teal-accent-4"
-          @click="reveal = true"
+          @click="handleGetBigNote"
       >
         <v-icon class="chevron" size="25" icon="fa:fas fa-chevron-down"></v-icon>
       </v-btn>
@@ -36,6 +36,7 @@
 import {useDisplay} from "vuetify";
 import usePutNotes from "~/composables/usePutNotes";
 import useDeleteNotes from "~/composables/useDeleteNotes";
+import useGetNote from "~/composables/useGetNote";
 
 export default {
   name: "LightNote",
@@ -53,14 +54,18 @@ export default {
       required: true
     },
     removeItem: {
-      type:Function,
-      required:true
+      type: Function,
+      required: true
+    }, updateItem: {
+      type: Function,
+      required: true
     }
   },
-  setup({id, title, completed,removeItem}) {
+  setup({id, title, completed, removeItem,updateItem}) {
     const {lgAndUp} = useDisplay()
     const {updateNote} = usePutNotes(id, title, completed)
     const {deleteNote} = useDeleteNotes(id)
+    const {getNote} = useGetNote(id)
     const isLoading = ref(false)
     const isCompleted = ref(completed)
 
@@ -86,16 +91,28 @@ export default {
         deleteNote()
         console.log(id)
         removeItem(id);
-        // removeFromArray(originalArray,id)
         isLoading.value = false
       } catch (error) {
         isLoading.value = false
         console.log(error)
         window.alert('Something went wrong')
       }
+
+    }
+    const handleGetBigNote = async () => {
+      try {
+        console.log(id)
+        let bigNote = await getNote(id);
+        updateItem(id,bigNote._value[0])
+      } catch (error) {
+        isLoading.value = false
+        console.log(error)
+        window.alert('Something went wrong' + error)
+      }
+
     }
 
-    return {lgAndUp, handleUpdate, handleDelete, isCompleted}
+    return {lgAndUp, handleUpdate, handleDelete, isCompleted, handleGetBigNote}
   }
 }
 </script>

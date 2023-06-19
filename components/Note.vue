@@ -20,10 +20,11 @@
         <v-icon @click="completed = false" v-show="completed" size="25" icon="fa:fas fa-circle"></v-icon>
         <v-icon size="25" icon="fa:fas fa-calendar-alt"></v-icon>
         {{
-          date.toLocaleDateString("es-MX", {
-            month: "short",
-            day: "2-digit",
-          })
+          // date.toLocaleDateString("es-MX", {
+          //   month: "short",
+          //   day: "2-digit",
+          // })
+          date
         }}
         <v-card-actions>
           <v-btn
@@ -32,8 +33,8 @@
               @click="reveal = true"
           >
             <v-icon size="25" icon="fa:far fa-comments"></v-icon>
-            <p class="exclamation">{{ comments.length }}</p>
-            <v-icon class="exclamation" color="red" v-if="comments.length>0" size="15" icon="fa:fas fa-flag"></v-icon>
+<!--            <p class="exclamation">{{ comments }}</p>-->
+<!--            <v-icon class="exclamation" color="red" v-if="comments.length>0" size="15" icon="fa:fas fa-flag"></v-icon>-->
           </v-btn>
           <v-btn
               variant="text"
@@ -57,7 +58,7 @@
           <p class="text-h4 text--primary">
             Comments
           </p>
-          <p v-for="(comment,index) in comments">{{ index + 1 }} {{ comment }}</p>
+          {{comments}}
         </v-card-text>
         <v-card-actions class="pt-0">
           <v-btn

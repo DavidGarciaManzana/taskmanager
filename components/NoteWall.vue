@@ -1,17 +1,20 @@
 <template>
   <div :class="lgAndDown ? 'mobileNoteWallContainer' : 'desktopNoteWallContainer'">
     <SearchBar :class="lgAndUp ? 'extendedWidth' : null"></SearchBar>
-    <AddNote></AddNote>
-    <template v-for="{id,title,is_completed} in lightNotes" :key="id">
-      <LightNote  :id="id"  :title="title" :completed="is_completed" :removeItem="removeItem" ></LightNote>
+    <AddNote ></AddNote>
+    <template v-for="note in lightNotes" :key="id">
+      <div v-if="Object.keys(note).length < 5">
+      <LightNote  :id="note.id" :title="note.title" :completed="note.is_completed" :removeItem="removeItem" :updateItem="updateItem"></LightNote>
+      </div>
+      <div v-else>
+        <Note :title="note.title" :completed="note.is_completed" :content="note.description" :date="note.due_date" :comments="note.comments" :tags="note.tags" />
+      </div>
     </template>
 
 
-
-
-<!--    <Note :title="'Visit my grandma'" :completed="false"-->
-<!--          :content="'Remember to take the chess with me to play with her'" :date="new Date()"-->
-<!--          :comments="['Talk about her grandsons','Do not talk about cars'] " :tags="['Family','Quality time']"></Note>-->
+    <!--    <Note :title="'Visit my grandma'" :completed="false"-->
+    <!--          :content="'Remember to take the chess with me to play with her'" :date="new Date()"-->
+    <!--          :comments="['Talk about her grandsons','Do not talk about cars'] " :tags="['Family','Quality time']"></Note>-->
 
   </div>
 
@@ -27,27 +30,15 @@ import useGetLightNotes from "~/composables/useGetLightNotes";
 
 export default {
   name: "NoteWall",
-  components: {SearchBar, Note,AddNote,LightNote},
+  components: {SearchBar, Note, AddNote, LightNote},
   setup() {
-    const originalArray = ref([])
     const {lgAndDown, lgAndUp} = useDisplay()
-    // const {lightNotes} = useGetLightNotes()
+    const {lightNotes} = useGetLightNotes()
     // // // todo Comentar la linea de abajo
-    const lightNotes = [{id:1,title:'hola',is_completed:0},{id:2,title:'hola',is_completed:1}]
+    // const lightNotes = [{id: 1, title: 'hola', is_completed: 0}, {id: 2, title: 'hola', is_completed: 1}]
     onMounted(() => {
       console.log('aqui');
 
-
-
-      // console.log(originalArray);
-      // console.log(lightNotes)
-      // console.log(lightNotes.value)
-      // console.log(lightNotes._value)
-      // console.log(lightNotes.value._value)
-      // console.log(lightNotes._rawValue)
-      // console.log(originalArray.value)
-      // originalArray.value = lightNotes
-      // console.log(originalArray.value)
     });
     watch(
         () => lightNotes,
@@ -55,16 +46,24 @@ export default {
           console.log('lightNotes updated:', newVal);
         }
     );
-    const removeItem=(id)=>{
+    const removeItem = (id) => {
       console.log(lightNotes)
       console.log(lightNotes._rawValue)
-      // lightNotes._value.splice(index, 1);
       const index = lightNotes._value.findIndex(note => note.id === id);
       if (index !== -1) {
         lightNotes._value.splice(index, 1);
       }
-}
-    return {lgAndDown, lgAndUp, lightNotes,removeItem}
+    }
+    const updateItem = (id,newNote)=>{
+      const index = lightNotes._value.findIndex(note => note.id === id);
+      if (index < 0 || index >= lightNotes._value.length) {
+        throw new Error('Invalid index');
+      }
+      lightNotes._value[index] = newNote;
+      console.log(lightNotes._value)
+    }
+
+    return {lgAndDown, lgAndUp, lightNotes, removeItem,updateItem}
   }
 }
 </script>

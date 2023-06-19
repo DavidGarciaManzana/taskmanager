@@ -134,7 +134,7 @@ export default {
     const is_completed = ref(false)
     const comments = ref('')
     const description = ref('')
-    const tags = ref([])
+    const tags = ref('')
     const date = ref('')
     const {postNotes} = usePostNotes()
     const {lgAndUp} = useDisplay()
@@ -147,8 +147,13 @@ export default {
       } else {
         is_completed.value = 0
       }
-      tags.value = tags?.value.join(" ")
-      date.value = date?.value.toString()
+      if (tags.value !== '') {
+        tags.value = tags?.value.join(" ")
+      }
+      if (date.value !== '') {
+        date.value = date?.value.toString()
+      }
+
       try {
         postNotes(title.value, is_completed.value, date.value, comments.value, description.value, tags.value)
         dialog.value = false
