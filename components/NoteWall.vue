@@ -2,19 +2,16 @@
   <div :class="lgAndDown ? 'mobileNoteWallContainer' : 'desktopNoteWallContainer'">
     <SearchBar :class="lgAndUp ? 'extendedWidth' : null"></SearchBar>
     <AddNote ></AddNote>
-    <template v-for="note in lightNotes" :key="id">
+    <template v-for="note in lightNotes" :key="note.id">
       <div v-if="Object.keys(note).length < 5">
       <LightNote  :id="note.id" :title="note.title" :completed="note.is_completed" :removeItem="removeItem" :updateItem="updateItem"></LightNote>
       </div>
       <div v-else>
-        <Note :title="note.title" :completed="note.is_completed" :content="note.description" :date="note.due_date" :comments="note.comments" :tags="note.tags" />
+        <Note :id="note.id" :title="note.title" :completed="note.is_completed" :content="note.description" :date="note.due_date" :comments="note.comments" :tags="note.tags" :removeItem="removeItem" />
       </div>
     </template>
 
 
-    <!--    <Note :title="'Visit my grandma'" :completed="false"-->
-    <!--          :content="'Remember to take the chess with me to play with her'" :date="new Date()"-->
-    <!--          :comments="['Talk about her grandsons','Do not talk about cars'] " :tags="['Family','Quality time']"></Note>-->
 
   </div>
 

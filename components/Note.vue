@@ -3,29 +3,23 @@
       width="280px"
       :class="[
           lgAndUp ? 'extendedWidth' : '',
-  completed ? 'isCompleted' : 'isNotCompleted',
+  isCompleted===1 ? 'completed' : null,
 
 ]">
     <v-card-text>
       <div class="tags">
-        <span class="tag" v-for="tag in tags">{{ tag }}</span>
+        <span class="tag">{{ tags }}</span>
       </div>
-      <v-icon class="closeTask" size="25" icon="fa:far fa-window-close"></v-icon>
-      <h1 :class="completed ? 'textCrossed' : null">
+      <v-icon @click="handleDelete" class="closeTask" size="25" icon="fa:far fa-window-close"></v-icon>
+      <h1 :class="isCompleted ? 'taskContainer' : null">
         {{ title }}
       </h1>
-      <p :class="completed ? 'textCrossed' : null">{{ content }}</p>
+      <p :class="isCompleted ? 'taskContainer' : null">{{ content }}</p>
       <div class="iconsContainer">
-        <v-icon @click="completed = true" v-show="!completed" size="25" icon="fa:far fa-circle"></v-icon>
-        <v-icon @click="completed = false" v-show="completed" size="25" icon="fa:fas fa-circle"></v-icon>
+        <v-icon @click="handleUpdate" v-if="isCompleted === 0" size="25" icon="fa:far fa-circle"></v-icon>
+        <v-icon @click="handleUpdate" v-else size="25" icon="fa:fas fa-circle"></v-icon>
         <v-icon size="25" icon="fa:fas fa-calendar-alt"></v-icon>
-        {{
-          // date.toLocaleDateString("es-MX", {
-          //   month: "short",
-          //   day: "2-digit",
-          // })
-          date
-        }}
+        {{ date }}
         <v-card-actions>
           <v-btn
               variant="text"
@@ -33,8 +27,8 @@
               @click="reveal = true"
           >
             <v-icon size="25" icon="fa:far fa-comments"></v-icon>
-<!--            <p class="exclamation">{{ comments }}</p>-->
-<!--            <v-icon class="exclamation" color="red" v-if="comments.length>0" size="15" icon="fa:fas fa-flag"></v-icon>-->
+            <p v-if="comments!==''" class="exclamation">1</p>
+            <v-icon class="exclamation" color="red" v-if="comments!==''" size="15" icon="fa:fas fa-flag"></v-icon>
           </v-btn>
           <v-btn
               variant="text"
@@ -58,7 +52,7 @@
           <p class="text-h4 text--primary">
             Comments
           </p>
-          {{comments}}
+          {{ comments }}
         </v-card-text>
         <v-card-actions class="pt-0">
           <v-btn
@@ -79,16 +73,22 @@
 <script>
 import {ref} from 'vue'
 import {useDisplay} from "vuetify";
+import usePutNotes from "~/composables/usePutNotes";
+import useDeleteNotes from "~/composables/useDeleteNotes";
 
 export default {
   name: "Note",
   props: {
+    id: {
+      type: Number,
+      required: true
+    },
     title: {
       type: String,
       required: true
     },
     completed: {
-      type: Boolean,
+      type: Number,
       required: true
     },
     content: {
@@ -101,14 +101,57 @@ export default {
       type: Array,
     },
     tags: {
-      type: Array,
-    }
+      type: String,
+    },
+    removeItem: {
+      type: Function,
+      required: true
+    },
   },
-  setup() {
+  setup({id, title, completed, content, date, comments, tags, removeItem}) {
+    console.log('setup')
+    console.log(id)
+    console.log(title)
+    console.log(completed)
+    console.log(content)
+    console.log(date)
+    console.log(comments)
+    console.log(tags)
+    console.log('setup')
     const {lgAndUp} = useDisplay()
+    const {updateNote} = usePutNotes(id, title, completed)
+    const {deleteNote} = useDeleteNotes(id)
+    const isLoading = ref(false)
+    const isCompleted = ref(completed)
+    const handleUpdate = () => {
+      isLoading.value = true
+      try {
+        updateNote()
+        isCompleted.value === 0 ? isCompleted.value = 1 : isCompleted.value = 0
+        isLoading.value = false
+      } catch (error) {
+        isLoading.value = false
+        console.log(error)
+        window.alert('Something went wrong')
+      }
+    }
+    const handleDelete = () => {
+      isLoading.value = true
+      try {
+        deleteNote()
+        console.log(id)
+        removeItem(id);
+        isLoading.value = false
+      } catch (error) {
+        isLoading.value = false
+        console.log(error)
+        window.alert('Something went wrong')
+      }
+
+    }
 
     const reveal = ref(false)
-    return {reveal, lgAndUp}
+    return {isCompleted, reveal, lgAndUp, handleUpdate, handleDelete}
   }
 }
 </script>
@@ -119,9 +162,13 @@ export default {
   margin-top: 28px;
 }
 
-.isCompleted {
-  background: lightgrey;
+.completed {
   margin-top: 28px;
+  background-color: darkgrey;
+}
+
+.completed .taskContainer {
+  text-decoration: line-through;
 }
 
 .v-card--reveal {
@@ -131,9 +178,7 @@ export default {
   width: 100%;
 }
 
-.textCrossed {
-  text-decoration: line-through;
-}
+
 
 .tags {
   display: flex;

@@ -23,7 +23,12 @@ const usePutNotes = (id, title, is_completed) => {
     }
 
     const updateNote = async () => {
-        console.log(id, title, is_completed)
+        console.log('id')
+        console.log(id)
+        console.log('title')
+        console.log(title)
+        console.log('completed')
+        console.log(is_completed)
         try {
             const resp = await axios.put(
                 `https://ecsdevapi.nextline.mx/vdev/tasks-challenge/tasks/${id}`,
