@@ -170,7 +170,6 @@ export default {
       // Si entra aqui hace el post
       if(!isConfig && id===0){
         try {
-          console.log(title.value, is_completed.value, date.value, comments.value, description.value, tags.value)
           postNotes(title.value, is_completed.value, date.value, comments.value, description.value, tags.value)
           dialog.value = false
           addItem({title:title.value,is_completed:is_completed})

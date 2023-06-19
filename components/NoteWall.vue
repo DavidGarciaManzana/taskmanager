@@ -32,7 +32,6 @@ export default {
   setup() {
     const {lgAndDown, lgAndUp} = useDisplay()
     const {lightNotes} = useGetLightNotes()
-    console.log(lightNotes)
     // // // todo Comentar la linea de abajo
     // const lightNotes = [{id: 1, title: 'hola', is_completed: 0}, {id: 2, title: 'hola', is_completed: 1}]
 

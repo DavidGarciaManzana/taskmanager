@@ -10,6 +10,7 @@
     <v-card-text class="d-flex">
       <v-icon @click="handleDelete" class="closeTask" size="25" icon="fa:far fa-window-close"></v-icon>
       <div class="taskContainer">
+<!--        todo Aqui puedo colocar esta funcionalidad (Marcar como completada la tarea), pero es necesario modificar como se llaman las APIS o crear un ENDPOINT especial-->
 <!--        <v-icon @click="handleUpdate" v-if="isCompleted === 0" size="20" icon="fa:far fa-circle"></v-icon>-->
 <!--        <v-icon @click="handleUpdate" v-else size="20" icon="fa:fas fa-circle"></v-icon>-->
         <div >
@@ -88,9 +89,6 @@ export default {
     }
   },
   setup({id, title, completed, removeItem,updateItem}) {
-    console.log(id)
-    console.log(title)
-    console.log(completed)
     const {lgAndUp} = useDisplay()
     const {updateLightNote} = usePutLightNotes()
     const {deleteNote} = useDeleteNotes(id)
@@ -134,7 +132,6 @@ export default {
           return
         }
         let bigNote = await getNote(id);
-        console.log(bigNote._value[0])
         updateItem(id,bigNote._value[0])
       } catch (error) {
         isLoading.value = false

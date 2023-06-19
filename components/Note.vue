@@ -115,7 +115,6 @@ export default {
     const handleUpdate = () => {
       isLoading.value = true
       try {
-        console.log(date)
         updateLightNote(id, title, completed, content, date, comments, tags)
         isCompleted.value === 0 ? isCompleted.value = 1 : isCompleted.value = 0
         isLoading.value = false
