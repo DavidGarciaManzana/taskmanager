@@ -24,8 +24,8 @@ const usePostNotes = () => {
                 data,
                 config
             )
-            answer.value = resp
-            console.log(answer.value)
+            answer.value = resp.data.task.id
+            return answer.value
         } catch(error){
             console.log(error)
         }

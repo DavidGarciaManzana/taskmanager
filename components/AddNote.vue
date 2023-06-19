@@ -154,8 +154,7 @@ export default {
     const {lgAndUp} = useDisplay()
     const dialog = ref(false)
 
-
-    const submitForm = () => {
+    const submitForm = async () => {
       if (is_completed.value) {
         is_completed.value = 1
       } else {
@@ -168,19 +167,20 @@ export default {
         date.value = date?.value.toString()
       }
       // Si entra aqui hace el post
-      if(!isConfig && id===0){
+      if (!isConfig && id === 0) {
         try {
-          postNotes(title.value, is_completed.value, date.value, comments.value, description.value, tags.value)
+          const apiId = await postNotes(title.value, is_completed.value, date.value, comments.value, description.value, tags.value)
+          console.log(apiId)
           dialog.value = false
-          addItem({title:title.value,is_completed:is_completed})
+          addItem({id: apiId, title: title.value, is_completed: is_completed})
         } catch (error) {
           window.alert('Something went wrong while trying to post ' + error)
         }
       }
       // Si entra aca hace el put
-      else{
+      else {
         try {
-          updateNote(id,title.value, is_completed.value, date.value, comments.value, description.value, tags.value)
+          updateNote(id, title.value, is_completed.value, date.value, comments.value, description.value, tags.value)
           dialog.value = false
         } catch (error) {
           window.alert('Something went wrong while trying to update ' + error)
