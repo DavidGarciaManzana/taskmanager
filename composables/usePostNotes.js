@@ -1,6 +1,5 @@
 import axios from "axios";
 const usePostNotes = () => {
-   const date_value = new Date().toString()
     const answer = ref([])
     const config = {
         headers: {
@@ -9,7 +8,7 @@ const usePostNotes = () => {
         }
     };
 
-    const postNotes = async (title,is_completed,date='date_value',comments='',description='',tags='') => {
+    const postNotes = async (title,is_completed,date,comments='',description='',tags='') => {
         const data = {
             token: 'bdgm-0001',
             title: title,

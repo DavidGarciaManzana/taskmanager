@@ -9,7 +9,8 @@ const usePutLightNotes = () => {
 
         }
     };
-    const updateLightNote = async (id, title, is_completed) => {
+    const updateLightNote = async (id, title, is_completed, content='', date='', comments='', tags='') => {
+        console.log(content, date, comments, tags)
         if (is_completed === 1) {
             is_completed = 0
         } else {
@@ -18,7 +19,11 @@ const usePutLightNotes = () => {
         const data = {
             token: 'bdgm-0001',
             title,
-            is_completed
+            is_completed,
+            content,
+            date,
+            comments,
+            tags
         }
 
         try {
