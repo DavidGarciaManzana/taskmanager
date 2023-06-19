@@ -135,10 +135,14 @@ export default {
     isConfig:{
       type:Boolean,
       default: false
+    },
+    addItem:{
+      type:Function,
+      default:(() => {})
     }
   },
   name: "AddNote",
-  setup({id,isConfig}) {
+  setup({id,isConfig,addItem}) {
     const title = ref('')
     const is_completed = ref(false)
     const comments = ref('')
@@ -168,6 +172,7 @@ export default {
         try {
           postNotes(title.value, is_completed.value, date.value, comments.value, description.value, tags.value)
           dialog.value = false
+          addItem({title:title.value,is_completed:is_completed})
         } catch (error) {
           window.alert('Something went wrong while trying to post ' + error)
         }

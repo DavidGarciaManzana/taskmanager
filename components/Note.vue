@@ -107,15 +107,6 @@ export default {
   AddNote
   },
   setup({id, title, completed, content, date, comments, tags, removeItem}) {
-    console.log('setup')
-    console.log(id)
-    console.log(title)
-    console.log(completed)
-    console.log(content)
-    console.log(date)
-    console.log(comments)
-    console.log(tags)
-    console.log('setup')
     const {lgAndUp} = useDisplay()
     const {updateNote} = usePutNotes()
     const {deleteNote} = useDeleteNotes(id)

@@ -1,7 +1,7 @@
 <template>
   <div :class="lgAndDown ? 'mobileNoteWallContainer' : 'desktopNoteWallContainer'">
     <SearchBar :class="lgAndUp ? 'extendedWidth' : null"></SearchBar>
-    <AddNote ></AddNote>
+    <AddNote :addItem="addItem" ></AddNote>
     <template v-for="note in lightNotes" :key="note.id">
       <div v-if="Object.keys(note).length < 5">
       <LightNote  :id="note.id" :title="note.title" :completed="note.is_completed" :removeItem="removeItem" :updateItem="updateItem"></LightNote>
@@ -59,8 +59,11 @@ export default {
       lightNotes._value[index] = newNote;
       console.log(lightNotes._value)
     }
+    const addItem =(newNote)=>{
+      lightNotes._value.push(newNote)
+    }
 
-    return {lgAndDown, lgAndUp, lightNotes, removeItem,updateItem}
+    return {lgAndDown, lgAndUp, lightNotes, removeItem,updateItem,addItem}
   }
 }
 </script>
