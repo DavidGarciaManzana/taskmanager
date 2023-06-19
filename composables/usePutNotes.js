@@ -27,7 +27,8 @@ const usePutNotes = () => {
                 data,
                 config
             )
-            answer.value = resp
+            answer.value = resp.data.task
+            return answer
         } catch (error) {
             console.log(error)
         }

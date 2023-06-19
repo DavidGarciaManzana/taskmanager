@@ -30,7 +30,7 @@
             <p v-if="comments!==''" class="exclamation">1</p>
             <v-icon class="exclamation" color="red" v-if="comments!==''" size="15" icon="fa:fas fa-flag"></v-icon>
           </v-btn>
-          <AddNote :id="id" :is-config="true"></AddNote>
+          <AddNote :id="id" :is-config="true" :updateItem="updateItem"></AddNote>
         </v-card-actions>
       </div>
     </v-card-text>
@@ -101,12 +101,15 @@ export default {
     removeItem: {
       type: Function,
       required: true
+    },updateItem: {
+      type: Function,
+      default:(() => {})
     },
   },
   components:{
   AddNote
   },
-  setup({id, title, completed, content, date, comments, tags, removeItem}) {
+  setup({id, title, completed, content, date, comments, tags, removeItem,updateItem}) {
     const {lgAndUp} = useDisplay()
     const {updateLightNote} = usePutLightNotes()
     const {deleteNote} = useDeleteNotes(id)
@@ -139,7 +142,7 @@ export default {
     }
 
     const reveal = ref(false)
-    return {isCompleted, reveal, lgAndUp, handleUpdate, handleDelete}
+    return {isCompleted, reveal, lgAndUp, handleUpdate, handleDelete,updateItem}
   }
 }
 </script>

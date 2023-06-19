@@ -139,10 +139,13 @@ export default {
     addItem:{
       type:Function,
       default:(() => {})
-    }
+    },updateItem:{
+      type:Function,
+      default:(() => {})
+    },
   },
   name: "AddNote",
-  setup({id,isConfig,addItem}) {
+  setup({id,isConfig,addItem,updateItem}) {
     const title = ref('')
     const is_completed = ref(false)
     const comments = ref('')
@@ -180,7 +183,8 @@ export default {
       // Si entra aca hace el put
       else {
         try {
-          updateNote(id, title.value, is_completed.value, date.value, comments.value, description.value, tags.value)
+          const newNote = await updateNote(id, title.value, is_completed.value, date.value, comments.value, description.value, tags.value)
+          updateItem(id,newNote._value)
           dialog.value = false
         } catch (error) {
           window.alert('Something went wrong while trying to update ' + error)

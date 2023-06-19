@@ -7,7 +7,7 @@
       <LightNote  :id="note.id" :title="note.title" :completed="note.is_completed" :removeItem="removeItem" :updateItem="updateItem"></LightNote>
       </div>
       <div v-else>
-        <Note :id="note.id" :title="note.title" :completed="note.is_completed" :content="note.description" :date="note.due_date" :comments="note.comments" :tags="note.tags" :removeItem="removeItem" />
+        <Note :id="note.id" :title="note.title" :completed="note.is_completed" :content="note.description" :date="note.due_date" :comments="note.comments" :tags="note.tags" :removeItem="removeItem" :updateItem="updateItem"/>
       </div>
     </template>
 
