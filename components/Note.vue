@@ -30,13 +30,7 @@
             <p v-if="comments!==''" class="exclamation">1</p>
             <v-icon class="exclamation" color="red" v-if="comments!==''" size="15" icon="fa:fas fa-flag"></v-icon>
           </v-btn>
-          <v-btn
-              variant="text"
-
-              @click="reveal = true"
-          >
-            <v-icon size="25" icon="fa:fas fa-cog"></v-icon>
-          </v-btn>
+          <AddNote :id="id" :is-config="true"></AddNote>
         </v-card-actions>
       </div>
     </v-card-text>
@@ -71,6 +65,7 @@
 </template>
 
 <script>
+import AddNote from "~/components/AddNote.vue";
 import {ref} from 'vue'
 import {useDisplay} from "vuetify";
 import usePutNotes from "~/composables/usePutNotes";
@@ -108,6 +103,9 @@ export default {
       required: true
     },
   },
+  components:{
+  AddNote
+  },
   setup({id, title, completed, content, date, comments, tags, removeItem}) {
     console.log('setup')
     console.log(id)
@@ -119,14 +117,14 @@ export default {
     console.log(tags)
     console.log('setup')
     const {lgAndUp} = useDisplay()
-    const {updateNote} = usePutNotes(id, title, completed)
+    const {updateNote} = usePutNotes()
     const {deleteNote} = useDeleteNotes(id)
     const isLoading = ref(false)
     const isCompleted = ref(completed)
     const handleUpdate = () => {
       isLoading.value = true
       try {
-        updateNote()
+        updateNote(id, title, completed)
         isCompleted.value === 0 ? isCompleted.value = 1 : isCompleted.value = 0
         isLoading.value = false
       } catch (error) {

@@ -6,28 +6,26 @@
         persistent
         width="1024"
     >
-      <template v-slot:activator="{ props }">
-        <v-card
-            height="172"
-            width="280"
-            :class="[
-          lgAndUp ? 'extendedWidth' : '',
-  'container'
-]"
-        >
+
+      <template v-if="!isConfig" v-slot:activator="{ props }">
+        <v-card height="172" width="280" :class="[lgAndUp ? 'extendedWidth' : '','container']">
           <v-card-actions>
-            <v-btn
-                width="500px"
-                height="172"
-                v-bind="props"
-            >
+            <v-btn width="500px" height="172" v-bind="props">
               <v-icon size="25" icon="fa:fas fa-plus"></v-icon>
             </v-btn>
           </v-card-actions>
-
-
         </v-card>
       </template>
+      <template v-else v-slot:activator="{ props }">
+        <v-card   :class="[lgAndUp ? 'configExtendedWidth' : '','configContainer']">
+          <v-card-actions>
+            <v-btn  v-bind="props">
+              <v-icon size="25" icon="fa:fas fa-cog"></v-icon>
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </template>
+
       <form @submit.prevent="submitForm">
         <v-card>
           <v-card-title class="mt-5 ml-5">
@@ -126,10 +124,21 @@
 <script>
 import {useDisplay} from "vuetify";
 import usePostNotes from "~/composables/usePostNotes";
+import usePutNotes from "~/composables/usePutNotes";
 
 export default {
+  props:{
+    id:{
+      type:Number,
+      default: 0
+    },
+    isConfig:{
+      type:Boolean,
+      default: false
+    }
+  },
   name: "AddNote",
-  setup() {
+  setup({id,isConfig}) {
     const title = ref('')
     const is_completed = ref(false)
     const comments = ref('')
@@ -137,6 +146,7 @@ export default {
     const tags = ref('')
     const date = ref('')
     const {postNotes} = usePostNotes()
+    const {updateNote} = usePutNotes()
     const {lgAndUp} = useDisplay()
     const dialog = ref(false)
 
@@ -153,13 +163,31 @@ export default {
       if (date.value !== '') {
         date.value = date?.value.toString()
       }
-
-      try {
-        postNotes(title.value, is_completed.value, date.value, comments.value, description.value, tags.value)
-        dialog.value = false
-      } catch (error) {
-        window.alert('Something wen wront ' + error)
+      // Si entra aqui hace el post
+      if(!isConfig && id===0){
+        try {
+          postNotes(title.value, is_completed.value, date.value, comments.value, description.value, tags.value)
+          dialog.value = false
+        } catch (error) {
+          window.alert('Something went wrong while trying to post ' + error)
+        }
       }
+      // Si entra aca hace el put
+      else{
+        try {
+          console.log('Aqui para actualizar engrane')
+          console.log(id)
+          console.log(title.value)
+          console.log(is_completed.value)
+          console.log(date.value)
+          console.log(comments.value)
+          updateNote(id,title.value, is_completed.value, date.value, comments.value, description.value, tags.value)
+          dialog.value = false
+        } catch (error) {
+          window.alert('Something went wrong while trying to update ' + error)
+        }
+      }
+
     }
     return {lgAndUp, dialog, title, is_completed, comments, description, tags, date, submitForm}
   }
@@ -170,10 +198,18 @@ export default {
 .extendedWidth {
   min-width: 500px;
 }
+.configExtendedWidth{
+  min-width: 20px;
+}
 
 .container {
   margin-top: 28px;
   background-color: darkgrey;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.configContainer{
   display: flex;
   justify-content: center;
   align-items: center;

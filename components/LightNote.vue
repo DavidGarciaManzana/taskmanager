@@ -63,7 +63,7 @@ export default {
   },
   setup({id, title, completed, removeItem,updateItem}) {
     const {lgAndUp} = useDisplay()
-    const {updateNote} = usePutNotes(id, title, completed)
+    const {updateNote} = usePutNotes()
     const {deleteNote} = useDeleteNotes(id)
     const {getNote} = useGetNote(id)
     const isLoading = ref(false)
@@ -73,7 +73,7 @@ export default {
     const handleUpdate = () => {
       isLoading.value = true
       try {
-        updateNote()
+        updateNote(id, title, completed)
         console.log(isCompleted.value)
         isCompleted.value === 0 ? isCompleted.value = 1 : isCompleted.value = 0
         console.log(isCompleted.value)
