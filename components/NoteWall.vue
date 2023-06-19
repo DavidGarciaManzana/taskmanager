@@ -25,27 +25,19 @@ import LightNote from "~/components/LightNote.vue";
 import {useDisplay} from "vuetify";
 import useGetLightNotes from "~/composables/useGetLightNotes";
 
+
 export default {
   name: "NoteWall",
   components: {SearchBar, Note, AddNote, LightNote},
   setup() {
     const {lgAndDown, lgAndUp} = useDisplay()
     const {lightNotes} = useGetLightNotes()
+    console.log(lightNotes)
     // // // todo Comentar la linea de abajo
     // const lightNotes = [{id: 1, title: 'hola', is_completed: 0}, {id: 2, title: 'hola', is_completed: 1}]
-    onMounted(() => {
-      console.log('aqui');
 
-    });
-    watch(
-        () => lightNotes,
-        (newVal) => {
-          console.log('lightNotes updated:', newVal);
-        }
-    );
+
     const removeItem = (id) => {
-      console.log(lightNotes)
-      console.log(lightNotes._rawValue)
       const index = lightNotes._value.findIndex(note => note.id === id);
       if (index !== -1) {
         lightNotes._value.splice(index, 1);
@@ -57,7 +49,6 @@ export default {
         throw new Error('Invalid index');
       }
       lightNotes._value[index] = newNote;
-      console.log(lightNotes._value)
     }
     const addItem =(newNote)=>{
       lightNotes._value.push(newNote)

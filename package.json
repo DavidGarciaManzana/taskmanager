@@ -18,6 +18,7 @@
   "dependencies": {
     "@date-io/dayjs": "^2.16.0",
     "axios": "^1.4.0",
+    "dotenv": "^16.3.1",
     "vuetify": "^3.3.4"
   }
 }

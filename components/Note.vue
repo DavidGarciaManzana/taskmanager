@@ -68,8 +68,8 @@
 import AddNote from "~/components/AddNote.vue";
 import {ref} from 'vue'
 import {useDisplay} from "vuetify";
-import usePutNotes from "~/composables/usePutNotes";
 import useDeleteNotes from "~/composables/useDeleteNotes";
+import usePutLightNotes from "~/composables/usePutLightNotes";
 
 export default {
   name: "Note",
@@ -108,14 +108,14 @@ export default {
   },
   setup({id, title, completed, content, date, comments, tags, removeItem}) {
     const {lgAndUp} = useDisplay()
-    const {updateNote} = usePutNotes()
+    const {updateLightNote} = usePutLightNotes()
     const {deleteNote} = useDeleteNotes(id)
     const isLoading = ref(false)
     const isCompleted = ref(completed)
     const handleUpdate = () => {
       isLoading.value = true
       try {
-        updateNote(id, title, completed)
+        updateLightNote(id, title, completed)
         isCompleted.value === 0 ? isCompleted.value = 1 : isCompleted.value = 0
         isLoading.value = false
       } catch (error) {
@@ -128,7 +128,6 @@ export default {
       isLoading.value = true
       try {
         deleteNote()
-        console.log(id)
         removeItem(id);
         isLoading.value = false
       } catch (error) {

@@ -148,7 +148,7 @@ export default {
     const comments = ref('')
     const description = ref('')
     const tags = ref('')
-    const date = ref('')
+    const date = ref('2023-09-09')
     const {postNotes} = usePostNotes()
     const {updateNote} = usePutNotes()
     const {lgAndUp} = useDisplay()
@@ -161,7 +161,7 @@ export default {
       } else {
         is_completed.value = 0
       }
-      if (tags.value !== '') {
+      if (tags.value !== '' || tags.value.length > 10) {
         tags.value = tags?.value.join(" ")
       }
       if (date.value !== '') {
@@ -170,6 +170,7 @@ export default {
       // Si entra aqui hace el post
       if(!isConfig && id===0){
         try {
+          console.log(title.value, is_completed.value, date.value, comments.value, description.value, tags.value)
           postNotes(title.value, is_completed.value, date.value, comments.value, description.value, tags.value)
           dialog.value = false
           addItem({title:title.value,is_completed:is_completed})
@@ -180,12 +181,6 @@ export default {
       // Si entra aca hace el put
       else{
         try {
-          console.log('Aqui para actualizar engrane')
-          console.log(id)
-          console.log(title.value)
-          console.log(is_completed.value)
-          console.log(date.value)
-          console.log(comments.value)
           updateNote(id,title.value, is_completed.value, date.value, comments.value, description.value, tags.value)
           dialog.value = false
         } catch (error) {

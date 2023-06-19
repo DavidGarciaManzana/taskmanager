@@ -10,8 +10,34 @@
     <v-card-text class="d-flex">
       <v-icon @click="handleDelete" class="closeTask" size="25" icon="fa:far fa-window-close"></v-icon>
       <div class="taskContainer">
-        <v-icon @click="handleUpdate" v-if="isCompleted === 0" size="20" icon="fa:far fa-circle"></v-icon>
-        <v-icon @click="handleUpdate" v-else size="20" icon="fa:fas fa-circle"></v-icon>
+<!--        <v-icon @click="handleUpdate" v-if="isCompleted === 0" size="20" icon="fa:far fa-circle"></v-icon>-->
+<!--        <v-icon @click="handleUpdate" v-else size="20" icon="fa:fas fa-circle"></v-icon>-->
+        <div >
+          <v-btn
+              color="red-darken-2"
+              @click="snackbar = true"
+          >
+            <v-icon size="15" icon="fa:fas fa-exclamation"></v-icon>
+          </v-btn>
+
+          <v-snackbar
+              v-model="snackbar"
+              multi-line
+          >
+            I wanted to add functionality to change the 'is_completed' status here, but it was impossible because using the 'PUT' method provided would delete all other information related to the task.
+
+
+            <template v-slot:actions>
+              <v-btn
+                  color="red"
+                  variant="text"
+                  @click="snackbar = false"
+              >
+                Close
+              </v-btn>
+            </template>
+          </v-snackbar>
+        </div>
         <h1 class="ml-5 text-h6 text--primary">
           {{ title }}
         </h1>
@@ -34,9 +60,9 @@
 
 <script>
 import {useDisplay} from "vuetify";
-import usePutNotes from "~/composables/usePutNotes";
 import useDeleteNotes from "~/composables/useDeleteNotes";
 import useGetNote from "~/composables/useGetNote";
+import usePutLightNotes from "~/composables/usePutLightNotes";
 
 export default {
   name: "LightNote",
@@ -62,21 +88,24 @@ export default {
     }
   },
   setup({id, title, completed, removeItem,updateItem}) {
+    console.log(id)
+    console.log(title)
+    console.log(completed)
     const {lgAndUp} = useDisplay()
-    const {updateNote} = usePutNotes()
+    const {updateLightNote} = usePutLightNotes()
     const {deleteNote} = useDeleteNotes(id)
-    const {getNote} = useGetNote(id)
+    const {getNote} = useGetNote()
     const isLoading = ref(false)
     const isCompleted = ref(completed)
+    const snackbar = ref(false);
 
 
     const handleUpdate = () => {
       isLoading.value = true
       try {
-        updateNote(id, title, completed)
-        console.log(isCompleted.value)
+
+        updateLightNote(id, title, completed)
         isCompleted.value === 0 ? isCompleted.value = 1 : isCompleted.value = 0
-        console.log(isCompleted.value)
         isLoading.value = false
       } catch (error) {
         isLoading.value = false
@@ -89,7 +118,6 @@ export default {
       isLoading.value = true
       try {
         deleteNote()
-        console.log(id)
         removeItem(id);
         isLoading.value = false
       } catch (error) {
@@ -101,8 +129,12 @@ export default {
     }
     const handleGetBigNote = async () => {
       try {
-        console.log(id)
+        if(id===undefined){
+          window.alert('Please refresh the web page again, as the API is not consumed when creating a new task. Since we don\'t have the ID yet, we are unable to display all the information')
+          return
+        }
         let bigNote = await getNote(id);
+        console.log(bigNote._value[0])
         updateItem(id,bigNote._value[0])
       } catch (error) {
         isLoading.value = false
@@ -112,7 +144,7 @@ export default {
 
     }
 
-    return {lgAndUp, handleUpdate, handleDelete, isCompleted, handleGetBigNote}
+    return {id,lgAndUp, handleUpdate, handleDelete, isCompleted, handleGetBigNote,snackbar}
   }
 }
 </script>
@@ -136,7 +168,8 @@ export default {
 
 .taskContainer {
   display: flex;
-  align-items: baseline;
+  align-items: center;
+  /*align-items: baseline;*/
 
 }
 

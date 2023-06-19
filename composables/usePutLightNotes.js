@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const usePutNotes = () => {
+const usePutLightNotes = () => {
     const answer = ref([])
     const config = {
         headers: {
@@ -9,16 +9,16 @@ const usePutNotes = () => {
 
         }
     };
-    const updateNote = async (id, title, is_completed,date='',comments='',description='',tags='') => {
-
+    const updateLightNote = async (id, title, is_completed) => {
+        if (is_completed === 1) {
+            is_completed = 0
+        } else {
+            is_completed = 1
+        }
         const data = {
             token: 'bdgm-0001',
             title,
-            is_completed,
-            date,
-            comments,
-            description,
-            tags
+            is_completed
         }
 
         try {
@@ -34,7 +34,7 @@ const usePutNotes = () => {
 
     }
 
-    return {updateNote}
+    return {updateLightNote}
 }
 
-export default usePutNotes
+export default usePutLightNotes

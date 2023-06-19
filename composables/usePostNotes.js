@@ -1,15 +1,15 @@
 import axios from "axios";
 const usePostNotes = () => {
+   const date_value = new Date().toString()
     const answer = ref([])
-    const token = 'e864a0c9eda63181d7d65bc73e61e3dc6b74ef9b82f7049f1fc7d9fc8f29706025bd271d1ee1822b15d654a84e1a0997b973a46f923cc9977b3fcbb064179ecd'
     const config = {
         headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${import.meta.env.VITE_BEARER}`,
             "Content-Type": "application/x-www-form-urlencoded",
         }
     };
 
-    const postNotes = async (title,is_completed,date='',comments='',description='',tags='') => {
+    const postNotes = async (title,is_completed,date='date_value',comments='',description='',tags='') => {
         const data = {
             token: 'bdgm-0001',
             title: title,
@@ -21,12 +21,12 @@ const usePostNotes = () => {
         }
         try {
             const resp = await axios.post(
-                'https://ecsdevapi.nextline.mx/vdev/tasks-challenge/tasks',
+                `${import.meta.env.VITE_URL_CNX}`,
                 data,
                 config
             )
             answer.value = resp
-            console.log(resp)
+            console.log(answer.value)
         } catch(error){
             console.log(error)
         }
